@@ -13,24 +13,31 @@ class Program
             case 0:
                 break;
             case 1:
-                Console.WriteLine("Please enter start speed :");
+                Console.WriteLine("Please enter start speed (km/h):");
                 float start_speed = CheckVariable();
-                Console.WriteLine("Please enter degree :");
+                Console.WriteLine("Please enter degree (not radians):");
                 float degree = CheckVariable();
-                ProjectileMotion(start_speed, degree);
+                Console.WriteLine(ProjectileMotion(start_speed, degree));
                 break;
             case 2:
-                Console.WriteLine("Please enter height :");                
-                FreeFall(CheckVariable());
+                Console.WriteLine("Please enter height (m):");
+                Console.WriteLine(FreeFall(CheckVariable()));
                 break;
             case 3:
                 OhmsLawAndElectricpower();
                 break;
             case 4:
+                Console.WriteLine("Please enter speed (km/h):");
+                float speed = CheckVariable();
+                Console.WriteLine("Please enter mass (km):");
+                float mass = CheckVariable();
+                Console.WriteLine("Please enter height (m):");
+                float height = CheckVariable();
+                Console.WriteLine(KineticAndPotentialEnergy(height, speed, mass));
                 break;
         }
     }
-    
+
 
     internal static byte CheckInput()
     {
@@ -41,14 +48,14 @@ class Program
     }
     internal static float CheckVariable()
     {
-        float input ;
+        float input;
         while (!float.TryParse(Console.ReadLine(), out input) || input < 0 || input > float.MaxValue)
             Console.WriteLine("Please enter a valid number :");
         return input;
     }
     public const float g = 9.8f;
     public const float pi = MathF.PI;
-    static void ProjectileMotion(float start_speed, float degree)
+    static string ProjectileMotion(float start_speed, float degree)
     {
         float vx, vy, t_up, h_max, t_total, throw_range;
         vx = start_speed * MathF.Cos(degree * pi / 180);
@@ -56,16 +63,45 @@ class Program
         t_up = vy / g;
         t_total = vy * vy / (2 * g);
         throw_range = vx * t_total;
+        string output = "";
+        return output;
     }
 
-    static void FreeFall(float h)
+    static string FreeFall(float h)
     {
         float t, v;
         t = MathF.Sqrt(2 * h / g);
         v = g * t;
+        string output = "";
+        return output;
     }
 
+    static string KineticAndPotentialEnergy(float h, float v, float m)
+    {
+        float KE, PE, E_total;
+        KE = 0.5f * m * v * v;
+        PE = m * g * h;
+        E_total = KE + KE;
+        string output = $"Kinetic energy = {KE.ToString("N2")}J\r\nGravitational potential energy = {PE.ToString("N2")}J\r\nMechanical energy = {E_total.ToString("N2")}J";
+        return output;
+    }
+    /*کاربر وارد میکنه:
 
+جرم m (کیلوگرم)
+
+سرعت v (متر بر ثانیه) — برای انرژی جنبشی
+
+ارتفاع h (متر) — برای انرژی پتانسیل
+
+حساب کنه:
+
+KE = ½ · m · v²
+
+PE = m · g · h
+
+E_total = KE + PE
+
+هر سه رو با واحد ژول (J) چاپ کنه.*/
     static void OhmsLawAndElectricpower()
     {
 
@@ -84,36 +120,59 @@ class OhmsLawAndElectricpower
     {
         switch (input - 1)
         {
-            case (byte)Electric.Voltage:            
+            case (byte)Electric.Voltage:
                 Console.WriteLine("Voltage is :" + Voltage());
                 break;
             case (byte)Electric.Current:
+                Console.WriteLine("Current is :" + Current());
                 break;
             case (byte)Electric.Resistance:
+                Console.WriteLine("Resistance is :" + Resistance());
                 break;
             case (byte)Electric.Power:
+                Console.WriteLine("Power is :" + Power());
                 break;
         }
     }
-     string Voltage()
+    string Voltage()
     {
         float i, r;
-        Console.WriteLine("Please enter Current : ");
+        Console.WriteLine("Please enter Current (A): ");
         i = Program.CheckVariable();
-        Console.WriteLine("Please enter Resistance :");
+        Console.WriteLine("Please enter Resistance (Ω):");
         r = Program.CheckVariable();
-        string output = (i * r).ToString("N4"); 
-        return output;
+        string output = (i * r).ToString("N4");
+        return output + "V";
     }
-     string Current()
+    string Current()
     {
         float v, r;
-        Console.WriteLine("Please enter voltage : ");
+        Console.WriteLine("Please enter voltage : (V)");
         v = Program.CheckVariable();
-        Console.WriteLine("Please enter Resistance :");
+        Console.WriteLine("Please enter Resistance (Ω):");
         r = Program.CheckVariable();
-        string output = float.Round(v / r,2).ToString("##,##"); 
-        return output;
+        string output = (v / r).ToString("N4");
+        return output + "A";
+    }
+    string Resistance()
+    {
+        float v, i;
+        Console.WriteLine("Please enter Current (A): ");
+        v = Program.CheckVariable();
+        Console.WriteLine("Please enter Resistance (Ω):");
+        i = Program.CheckVariable();
+        string output = (v / i).ToString("N4");
+        return output + "Ω";
+    }
+    string Power()
+    {
+        float v, i;
+        Console.WriteLine("Please enter voltage (V): ");
+        v = Program.CheckVariable();
+        Console.WriteLine("Please enter Current (A):");
+        i = Program.CheckVariable();
+        string output = (v * i).ToString("N4");
+        return output + "W";
     }
 
 }
